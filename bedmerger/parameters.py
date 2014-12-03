@@ -135,7 +135,7 @@ class Parameters(object):
 
         args.add_argument("--reference_path", "--reference-path",
                           default='/data/external_public/reference_genomes/'
-                          'hg19/chr*s.fa.gz',
+                          'hg19/chr%s.fa.gz',
                           help="""A folder with the reference sequence files in
                           fasta format, only required when --check_reference is
                           used. hg18, hg19, ancestral_hg19 and ancestral_hg38
@@ -157,15 +157,6 @@ class Parameters(object):
         #--------------------------------------------------
         # subsetting
         #--------------------------------------------------
-        args.add_argument("--subset_snp", type=file,
-                          help="""File with SNP (one SNP per row, in chr\tpos
-                          format)that should be kept
-                          """)
-
-        args.add_argument("--subset_individuals", type=file,
-                          help="""File with individuals (one ind per row that
-                               should be kept kept  """)
-
         args.add_argument("--chromosomes", "--chromosome", nargs="*",
                           default=None,
                           help="""list of chromosomes to be included in data
@@ -176,10 +167,6 @@ class Parameters(object):
         #--------------------------------------------------
         args.add_argument("--plink", default="plink",
                           help="""path to the plink executable to be used""")
-        args.add_argument("--tabix", default="tabix",
-                          help="""path to the tabix executable to be used""")
-        args.add_argument("--bgzip", default="bgzip",
-                          help="""path to the bgzip executable to be used""")
 
 
         #--------------------------------------------------
@@ -198,12 +185,6 @@ class Parameters(object):
                           const=logging.INFO
                           )
     
-    #   disabled, as functionality can be achieved by setting reference_path to
-    #   ancestral sequence
-    #    args.add_argument("--ancestral_file", default=False,
-    #            help="""A folder with a reconstructed ancestral sequence as .fa.gz
-    #            file""")
-
         Parameters.args = args
     
         return args

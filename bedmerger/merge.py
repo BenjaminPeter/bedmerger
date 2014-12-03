@@ -1,10 +1,11 @@
 import socket
 import logging
+import sys
 
 import vcf
 import utils
 import refseq
-import grid
+import io
 
 """
 This module handles the main merging pipeline
@@ -32,6 +33,9 @@ def merge(params):
     """
 
     if socket.gethostname() == "spudhead":
+        return merge_grid(params)
+
+    if True:
         return merge_grid(params)
 
     # 1
@@ -83,19 +87,19 @@ def construct_reference_sequence(params):
     else:
         reference_path = params.reference_path
 
-    if params.check_reference:
-        logging.info("starting reference construction")
-        ref = refseq.make_reference_allele_table(
-                vcf_files=params.vcf,
-                bim_files=params.bed,
-                reference_path=reference_path,
-                merge_type=params.merge_type,
-                chromosomes=params.chromosomes
+    logging.info("starting reference construction")
+    ref = refseq.make_reference_allele_table(
+            vcf_files=params.vcf,
+            bim_files=params.bed,
+            reference_path=reference_path,
+            merge_type=params.merge_type,
+            chromosomes=params.chromosomes,
+            id_mode=params.keep_snp_id
                                                 )
-        refseq.write_all_plink_files(ref, params)
-        logging.info("finished reference construction")
+    io.write_all_plink_files(ref, params)
+    logging.info("finished reference construction")
 
-        return ref
+    return ref
 
 
 def transform_vcf_to_bed(vcf_files, twd, plink="plink"):
@@ -231,10 +235,6 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
     final_filter = False
     if params.output_type is not 'bed':
         final_filter = True
-    elif params.subset_snp is not None:
-        final_filter = True
-    elif params.subset_individuals is not None:
-        final_filter = True
     elif params.set_missing_to_reference:
         final_filter = True
 
@@ -272,13 +272,6 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
         if params.output_type is 'ped':
             filter_flags['recode'] = ''
 
-        if params.subset_snp is not None:
-            filter_flags['extract'] = params.subset_snp
-
-        if params.subset_individuals is not None:
-            raise NotImplementedError()
-            filter_flags['extract'] = params.subset_individuals
-
         filter_flags['out'] = params.out
 
         if params.check_reference:
@@ -303,4 +296,19 @@ def merge_grid(params):
         Desc
     
     """
-    grid.merge(params)
+    flags = {}
+    flags['N'] = params.out
+    flags['o'] = "%s.log" % params.out
+    flags['j'] = "y"
+    flags['cwd'] = ""
+    flags['l'] = 'h_vmem=10g'
+
+    command = " ".join(sys.argv)
+
+    launch_script = "!/bin/bash\n"
+
+    for flag in flags.items():
+        launch_script += "#$ -%s %s\n" % flag
+
+    launch_script += "%s\nexit 0" % command
+    print launch_script

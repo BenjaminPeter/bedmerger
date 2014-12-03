@@ -10,7 +10,7 @@ import utils
 
 def make_reference_allele_table(vcf_files=[], bim_files=[],
                                 reference_path='/data/reference/hg19/',
-                                merge_type="outer", id_mode="pos",
+                                merge_type="outer", id_mode="false",
                                 chromosomes=None):
     """make_reference_allele_table
 
@@ -68,7 +68,9 @@ def make_reference_allele_table(vcf_files=[], bim_files=[],
         # checks if ref allele is present as one of the snp alleles
         check_reference_alleles(reference_alleles)
     else:
+        reference_alleles = variants
         reference_alleles['consistency'] = True
+        reference_alleles['ref'] = reference_alleles['a2']
 
     # creates for each snp an id of form chrom_pos_a1_a2
     reference_alleles['dataid'] = create_data_id(reference_alleles)
@@ -164,7 +166,7 @@ def merge_data_sets(data_sets, merge_type="outer"):
     return variants
 
 
-def unify_ids(variants, id_mode="left", na_strings=[".", "NA"]):
+def unify_ids(variants, id_mode="false", na_strings=[".", "NA"]):
     """ gets a single id for the merged snp, works inplace
     
     Parameters
@@ -180,8 +182,11 @@ def unify_ids(variants, id_mode="left", na_strings=[".", "NA"]):
         strings that signify no data
     
     """
-    if id_mode not in ["pos", "left", "merge"]:
-        raise NotImplementedError("id merge type not supported")
+    if id_mode not in ["false", "left", "merge"]:
+        raise NotImplementedError("id merge type not supported %s" % id_mode)
+
+    if id_mode == "false":
+        return
 
     id_cols2 = [s.startswith('snpid') for s in variants.columns.values]
 

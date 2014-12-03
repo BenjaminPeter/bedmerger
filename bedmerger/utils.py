@@ -5,9 +5,9 @@ import logging
 def standardize_bed_file_name(bedfile):
     """ removes the bed extension from bed name if present"""
     fname, ext = os.path.splitext(bedfile)
-    assert ext == ".bed" or ext == ""
-
-    return fname
+    if ext == ".bed":
+        return fname
+    return bedfile
 
 
 def assert_bed_file_exists(bedfile):

@@ -206,7 +206,9 @@ class Parameters(object):
 
         if params.out is None:
             vcf_names = [os.path.splitext(v)[0] for v in params.vcf]
-            files = params.bed + vcf_names
+            vcf_names = [v.split(os.path.sep)[-1] for v in vcf_names]
+            bed_names = [b.split(os.path.sep)[-1] for b in params.bed]
+            files = bed_names + vcf_names
             params.out = "merged_" + "+".join(files)
 
         params.ref_allele = "dump.txt"

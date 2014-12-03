@@ -89,7 +89,7 @@ class Parameters(object):
                           )
 
         args.add_argument("--output_type", default="bed",
-                          choices=['bed', 'vcf', 'ped'],
+                          choices=['bed', 'vcf'],
                           help="the format of the output file")
 
         args.add_argument("--merge_type", default="outer",
@@ -98,7 +98,7 @@ class Parameters(object):
                           join, keeping all SNP. `inner` only keeps SNP that
                           are shared between populations. `left` and `right`
                           keep all SNP from the first/second
-                          data set, respectively.
+                          data set, respectively in each merge.
                           """)
 
         args.add_argument("--retained_snp", default="retained.txt",
@@ -107,10 +107,11 @@ class Parameters(object):
                           """)
 
         args.add_argument("--keep_snp_id", default='false',
-                          choices=['left', 'right', 'false', 'merge'],
-                          help="""if SNP id's should be retained. False will set
-                          it to chr_pos, left/right keep the id from the
-                          left/right file, respectively. `merge` concatenates
+                          choices=['left', 'false', 'merge'],
+                          help="""if SNP id's should be retained. `false` will set
+                          it to chr_pos_a1_a2, left keeps the id from the
+                          leftmost file, as long as it is not na.
+                          `merge` concatenates
                           the SNP ids.""")
 
         args.add_argument("--pwd", '--working-directory', default="./",
@@ -118,7 +119,9 @@ class Parameters(object):
                           """)
 
         args.add_argument("--twd", '--temp-directory', default="/tmp",
-                          help="""The directory where temporary files are stored
+                          help="""The directory where temporary files are
+                          stored.
+                          created if it does not exist
                           """)
 
         # --------------------------------------------------

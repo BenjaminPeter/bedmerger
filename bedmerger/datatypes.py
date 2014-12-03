@@ -15,11 +15,9 @@ class DataFile(object):
             else:
                 return super(DataFile, cls).__new__(BimFile)
         else:
-            print "not creating"
             return super(DataFile, cls).__new__(cls, fname)
     
     def __init__(self, fname):
-        print "data init"
         self.fname = fname
 
     def load_variants(self):

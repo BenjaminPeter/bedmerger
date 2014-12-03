@@ -32,6 +32,7 @@ def make_reference_allele_table(vcf_files=[], bim_files=[],
         file id of bim files, without extension
     reference_path : str
         path to where reference alleles are found
+        if None, reference is not checked
     merge_type : str
         how data sets are merged, either inner or outer
     id_mode : str
@@ -60,11 +61,14 @@ def make_reference_allele_table(vcf_files=[], bim_files=[],
     unify_ids(variants, id_mode)
     
     # gets the reference sequence allele for all snp pos
-    reference_alleles = get_reference_alleles(variants,
-                                              reference_path)
+    if reference_path is not None:
+        reference_alleles = get_reference_alleles(variants,
+                                                  reference_path)
 
-    # checks if ref allele is present as one of the snp alleles
-    check_reference_alleles(reference_alleles)
+        # checks if ref allele is present as one of the snp alleles
+        check_reference_alleles(reference_alleles)
+    else:
+        reference_alleles['consistency'] = True
 
     # creates for each snp an id of form chrom_pos_a1_a2
     reference_alleles['dataid'] = create_data_id(reference_alleles)

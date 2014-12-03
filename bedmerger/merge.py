@@ -78,15 +78,20 @@ def construct_reference_sequence(params):
     ref : pd.DataFrame
         reference sequence
     """
+    if not params.check_reference:
+        reference_path = None
+    else:
+        reference_path = params.reference_path
+
     if params.check_reference:
         logging.info("starting reference construction")
         ref = refseq.make_reference_allele_table(
-                vcf_files = params.vcf, 
-                bim_files = params.bed,
-                reference_path = params.reference_path,
-                merge_type = params.merge_type,
+                vcf_files=params.vcf,
+                bim_files=params.bed,
+                reference_path=reference_path,
+                merge_type=params.merge_type,
                 chromosomes=params.chromosomes
-               )
+                                                )
         refseq.write_all_plink_files(ref, params)
         logging.info("finished reference construction")
 
@@ -157,18 +162,13 @@ def filter_bed_files(bed_files, bim_files, params):
     new_bed_ids = []
     for i, bed_file in enumerate(bed_files):
 
+        filtered_bed_name = utils.path(params.twd, "filtered_bed%s" % i)
 
-        filtered_bed_name = utils.path(params.twd, 
-                "filtered_bed%s"%i)
-
-        filter_bed(bed_file, bim_files[i],
-                filtered_bed_name, 
-                params.retained_snp,
-                params.plink)
+        filter_single_bed(bed_file, bim_files[i],
+                          filtered_bed_name,
+                          params.retained_snp,
+                          params.plink)
         new_bed_ids.append(filtered_bed_name)
-
-
-
 
     logging.info("finished bed filtering")
     return new_bed_ids

@@ -258,7 +258,7 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
     # 2. set missing to reference
     if params.set_missing_to_reference:
         flags = dict()
-        flags['bfile'] = flags['out']
+        flags['bfile'] = utils.path(params.twd, "tmp_out")
 
         if params.check_reference:
             flags['a2-allele'] = params.ref_allele
@@ -267,7 +267,7 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
             flags['fill-missing-a2'] = ''
 
         flags['out'] = utils.path(params.twd, "tmp_impute")
-        flags['make-bed'] == ''
+        flags['make-bed'] = ''
 
         utils.run_plink(params.plink, flags)
 
@@ -293,9 +293,6 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
         if params.check_reference:
             filter_flags['a2-allele'] = params.ref_allele
 
-        if params.set_missing_to_reference:
-            filter_flags['fill-missing-a2'] = ''
-    
         utils.run_plink(params.plink, filter_flags)
     
     logging.info("finished merging")

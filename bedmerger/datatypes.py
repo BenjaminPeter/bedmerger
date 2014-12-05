@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import logging
 
 from vcf import is_vcf
 
@@ -62,10 +63,13 @@ class BimFile(DataFile):
     def exists(self):
         """checks if file exists"""
         if not os.path.isfile(self.fname + ".bed"):
+            logging.error("%s.bed not found" % self.fname)
             return False
         if not os.path.isfile(self.fname + ".bim"):
+            logging.error("%s.bim not found" % self.fname)
             return False
         if not os.path.isfile(self.fname + ".fam"):
+            logging.error("%s.fam not found" % self.fname)
             return False
         return True
 
@@ -116,6 +120,6 @@ def sort_alleles( a ):
 
     """
     to_swap = a.a1 > a.a2
-    a[to_swap,'a1'], a[to_swap, 'a2'] = a.a2[to_swap], a.a1[to_swap]
+    a.loc[to_swap,'a1'], a.loc[to_swap, 'a2'] = a.a2[to_swap], a.a1[to_swap]
 
     return a

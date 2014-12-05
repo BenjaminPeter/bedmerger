@@ -112,7 +112,9 @@ class Parameters(object):
                           it to chr_pos_a1_a2, left keeps the id from the
                           leftmost file, as long as it is not na.
                           `merge` concatenates
-                          the SNP ids.""")
+                          the SNP ids. 
+                          WARNING: everything except false is very
+                          slow at the moment!""")
 
         args.add_argument("--pwd", '--working-directory', default="./",
                           help="""The working directory for relative paths

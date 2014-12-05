@@ -2,6 +2,7 @@ import gzip
 import numpy as np
 import pandas as pd
 import logging
+import os
 
 
 from datatypes import DataFile, BimFile
@@ -361,10 +362,11 @@ def rename_snpids_from_data(tmp_bed_files, twd=""):
     new_tmp_files = []
 
     for fname in tmp_bed_files:
+        new_name = os.path.basename(fname)
         if twd == "":
-            out_path = "%s_tmp.bim" % fname
+            out_path = "%s_tmp.bim" % new_name 
         else:
-            out_path = utils.path(twd, "%s_tmp.bim" % fname)
+            out_path = utils.path(twd, "%s_tmp.bim" % new_name)
 
         bim = BimFile(fname)
         data = bim.load_variants()

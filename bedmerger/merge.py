@@ -57,8 +57,10 @@ def merge(params):
     merge_beds(filtered_beds, params)
 
     # 6
-    refseq.restore_snpids(params.out,
-                          utils.path(params.twd, "original_ids.txt"))
+    if params.keep_snp_id != 'false':
+        print "QWEQW", params.keep_snp_id
+        refseq.restore_snpids(params.out,
+                              utils.path(params.twd, "original_ids.txt"))
 
 
 def construct_reference_sequence(params):

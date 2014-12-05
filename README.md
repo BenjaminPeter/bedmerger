@@ -6,6 +6,8 @@ commands:
 requires plink 1.9, numpy and pandas, on spudhead/spudlings, run using python
 2.7.6
 
+#### known issue:
+logging is very messy and not consistent
 
 The help message output is pasted below for convenience:
 

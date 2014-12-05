@@ -35,9 +35,6 @@ def merge(params):
     if socket.gethostname() == "spudhead":
         return merge_grid(params)
 
-    if True:
-        return merge_grid(params)
-
     # 1
     construct_reference_sequence(params)
     

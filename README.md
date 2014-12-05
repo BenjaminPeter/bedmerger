@@ -13,19 +13,19 @@ logging is very messy and not consistent
 
 - from the human origins data set, get all snp on chromosome 1 that have an ancestral allele typed 
 
-	python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
-			    --check-reference 
- 			    --reference_path ancestral_hg19 
-			    --pwd test 
-			    --keep_snp_id false 
-			    --out vdata_polarized
-			    --chromosome 1
+    python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+                        --check-reference 
+                        --reference_path ancestral_hg19 
+                        --pwd test 
+                        --keep_snp_id false 
+                        --out vdata_polarized
+                        --chromosome 1
 
 
 - merge the data sets from bhakar ,the human origins data set and 1000g, check the reference
-	 and keep only snp present in all three data sets 
+     and keep only snp present in all three data sets 
 
-	python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+    python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
 
 
 #### Parameters

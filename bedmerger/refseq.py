@@ -327,6 +327,7 @@ def fix_chromosome_ids(data):
     """
     def fix(data, old, new):
         to_fix = data['chrom'] == old
+        print ("fixing, %d to fix with %s/%s" % (np.sum(to_fix), old, new))
         data.loc[to_fix, 'chrom'] == new
 
     fix(data, 'MT', 'mt')

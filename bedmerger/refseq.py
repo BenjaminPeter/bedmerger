@@ -391,7 +391,7 @@ def rename_snpids_from_data(tmp_bed_files, twd=""):
 
         bim = BimFile(fname)
         data = bim.load_variants()
-        data.fix_chromosome_ids()
+        fix_chromosome_ids(data)
         data['snpid'] = create_data_id(data)
         BimFile.write_file(out_path, data)
         new_tmp_files.append(out_path)

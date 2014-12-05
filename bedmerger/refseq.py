@@ -316,6 +316,27 @@ def read_reference_chromosome(chromosome_id, reference_path):
         logging.warning("could not open file %s" % ref_chr_name)
         return None
 
+def fix_chromosome_ids(data):
+    """fix_chromosome_ids
+    
+    Parameters
+    ----------
+    data : refseq
+        data to fix chromosomes on
+    
+    """
+    def fix(data, old, new):
+        to_fix = data['chrom'] == old
+        data.loc[to_fix, 'chrom'] == new
+
+    fix(data, 'MT', 'mt')
+    fix(data, 'M', 'mt')
+    fix(data, '90', 'mt')
+    fix(data, '26', 'mt')
+
+    fix(data, '23', 'X')
+    fix(data, '24', 'Y')
+
 
 def check_reference_alleles(reference_alleles):
     """check_reference_alleles
@@ -370,6 +391,7 @@ def rename_snpids_from_data(tmp_bed_files, twd=""):
 
         bim = BimFile(fname)
         data = bim.load_variants()
+        data.fix_chromosome_ids()
         data['snpid'] = create_data_id(data)
         BimFile.write_file(out_path, data)
         new_tmp_files.append(out_path)

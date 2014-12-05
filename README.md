@@ -9,6 +9,24 @@ requires plink 1.9, numpy and pandas, on spudhead/spudlings, run using python
 #### known issue:
 logging is very messy and not consistent
 
+#### example usages:
+
+    - from the human origins data set, get all snp on chromosome 1 that have an ancestral allele typed 
+
+	python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+			    --check-reference 
+ 			    --reference_path ancestral_hg19 
+			    --pwd test 
+			    --keep_snp_id false 
+			    --out vdata_polarized
+			    --chromosome 1
+
+
+    - merge the data sets from bhakar ,the human origins data set and 1000g, check the reference
+	 and keep only snp present in all three data sets 
+
+	python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+
 The help message output is pasted below for convenience:
 
     usage: bedmerger.py [-h] [--bed [BED [BED ...]]] [--vcf [VCF [VCF ...]]]

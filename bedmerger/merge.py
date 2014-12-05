@@ -305,10 +305,11 @@ def merge_grid(params):
 
     command = " ".join(sys.argv)
 
-    launch_script = "!/bin/bash\n"
+    launch_script = "#!/bin/bash\n"
 
     for flag in flags.items():
         launch_script += "#$ -%s %s\n" % flag
 
-    launch_script += "%s\nexit 0" % command
+    launch_script += sys.executable
+    launch_script += "  %s\nexit 0" % command
     print launch_script

@@ -116,6 +116,6 @@ def sort_alleles( a ):
 
     """
     to_swap = a.a1 > a.a2
-    a.a1[to_swap], a.a2[to_swap] = a.a2[to_swap], a.a1[to_swap]
+    a[to_swap,'a1'], a[to_swap, 'a2'] = a.a2[to_swap], a.a1[to_swap]
 
     return a

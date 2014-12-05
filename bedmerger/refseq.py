@@ -242,18 +242,25 @@ def get_reference_alleles(pos_alleles, reference_path,
 
     for chrom in np.unique(pos_alleles['chrom']):
         ref_chr = read_reference_chromosome(chrom, reference_path)
-
-        logging.debug('loaded chromosome %s, %d reference alleles,'
-                      ' %d remaining', chrom, len(pos_alleles),
-                      np.sum(ref_chr is None is np.nan))
-                
         chrom_loc = pos_alleles['chrom'] == chrom
-        cur_chrom_pos = pos_alleles['pos'][chrom_loc] - 1
-        ref_alleles = [(ref_chr[i]).upper() for i in cur_chrom_pos]
-        ref_call[np.array(chrom_loc)] = ref_alleles
+
+        if ref_chr is None:
+            logging.warning("could not load reference chromsome for %s"
+                            "will set to N for all variants")
+
+            ref_call[np.array(chrom_loc)] = 'N'
+        else:
+
+            logging.debug('loaded chromosome %s, %d reference alleles,'
+                          ' %d remaining', chrom, len(pos_alleles),
+                          np.sum(ref_chr is None is np.nan))
+                    
+            cur_chrom_pos = pos_alleles['pos'][chrom_loc] - 1
+            ref_alleles = [(ref_chr[i]).upper() for i in cur_chrom_pos]
+            ref_call[np.array(chrom_loc)] = ref_alleles
     
-        logging.debug('added %d new entries from chromosome %s',
-                      np.sum(chrom_loc), chrom)
+            logging.debug('added %d new entries from chromosome %s',
+                          np.sum(chrom_loc), chrom)
 
     # end of loop
 
@@ -278,7 +285,7 @@ def read_reference_chromosome(chromosome_id, reference_path):
     Returns
     -------
     refseq : str
-        string with reference sequence
+        string with reference sequence, None, if file is missing
     """
 
     chromosome_id = str(chromosome_id)
@@ -295,14 +302,18 @@ def read_reference_chromosome(chromosome_id, reference_path):
 
     ref_chr_name = reference_path % chromosome_id
     
-    with gzip.open(ref_chr_name) as f:
-        f.readline()
-        ref1 = f.readlines()
+    try:
+        with gzip.open(ref_chr_name) as f:
+            f.readline()
+            ref1 = f.readlines()
 
-    ref1 = [l.strip() for l in ref1]
-    ref1 = "".join(ref1)
+        ref1 = [l.strip() for l in ref1]
+        ref1 = "".join(ref1)
     
-    return ref1
+        return ref1
+    except IOError:
+        logging.warning("could not open file %s" % ref_chr_name)
+        return None
 
 
 def check_reference_alleles(reference_alleles):

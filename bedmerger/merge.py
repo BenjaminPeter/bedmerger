@@ -274,7 +274,7 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
         filter_flags['out'] = params.out
 
         if params.check_reference:
-            filter_flags['a2_allele'] = params.ref_allele
+            filter_flags['a2-allele'] = params.ref_allele
 
         if params.set_missing_to_reference:
             filter_flags['fill-missing-a2'] = ''

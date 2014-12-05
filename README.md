@@ -11,23 +11,47 @@ logging is very messy and not consistent
 
 #### example usages:
 
-- from the human origins data set, get all snp on chromosome 1 that have an ancestral allele typed 
+- from the human origins data set, get all snp on chromosome X that have an ancestral allele typed 
 
-    python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
-                        --check-reference 
-                        --reference_path ancestral_hg19 
-                        --pwd test 
-                        --keep_snp_id false 
-                        --out vdata_polarized
-                        --chromosome 1
-
-
-- merge the data sets from bhakar ,the human origins data set and 1000g, check the reference
-     and keep only snp present in all three data sets 
-
-    python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
+                            --check-reference 
+                            --reference_path ancestral_hg19 
+                            --keep_snp_id false --out
+                            --out out/vdata_polarized 
+                            --chromosome X  
+                            --twd tmp 
+                            --plink ~/bin/plink
 
 
+- merge the data sets from bhakar2013 ,the human origins data set and 1000g, check the reference
+     and keep only snp present in all three data sets, write a vcf file in the
+end
+
+        python bedmerger.py --vcf /data/external_public/1000genomes/release/Phase3/ALL.chr21.phase3_shapeit2_mvncall_integrated.20130502.genotype.vcf.gz
+                            --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata 
+                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper 
+                            --check-reference
+                            --reference_path hg19 
+                            --keep_snp_id false  
+                            --chromosome 21 
+                            --twd tmp 
+                            --plink ~/bin/plink 
+                            --merge_type inner 
+                            --output_type vcf
+
+
+- merge the data sets from bhakar2013 and the human origins data set, keep all
+  snp and set missing data to the reference allele
+
+        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata 
+                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper 
+                            --check-reference
+                            --reference_path hg19 
+                            --keep_snp_id false  
+                            --twd tmp 
+                            --merge_type outer
+                            --plink ~/bin/plink 
+                            --out out/ex_outer
 #### Parameters
 
 The help message output is pasted below for convenience:

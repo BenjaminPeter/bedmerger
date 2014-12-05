@@ -116,9 +116,9 @@ class Parameters(object):
                           WARNING: everything except false is very
                           slow at the moment!""")
 
-        args.add_argument("--pwd", '--working-directory', default="./",
-                          help="""The working directory for relative paths
-                          """)
+#        args.add_argument("--pwd", '--working-directory', default="./",
+#                          help="""The working directory for relative paths
+#                          """)
 
         args.add_argument("--twd", '--temp-directory', default="/tmp",
                           help="""The directory where temporary files are
@@ -221,11 +221,14 @@ class Parameters(object):
     def setup(params):
         """setup operations, currently just creates directories
         """
+#        if not os.path.exists(params.pwd):
+#                os.makedirs(params.pwd)
+#        os.chdir(params.pwd)
         if not os.path.exists(params.twd):
                 os.makedirs(params.twd)
-        if not os.path.exists(params.pwd):
-                os.makedirs(params.pwd)
-        os.chdir(params.pwd)
+        out_dir = os.path.dirname(params.out)
+        if not os.path.exists(out_dir) and not out_dir == '':
+                os.makedirs(out_dir)
     
     def sanity_checks(params):
         """perform some checks that the input arguments make sense"""

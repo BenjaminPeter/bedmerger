@@ -232,11 +232,12 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
     logging.info("starting merging")
 
     final_filter = False
-    if params.output_type is not 'bed':
+    if params.output_type != 'bed':
         final_filter = True
-    elif params.set_missing_to_reference:
+    elif params.check_reference:
         final_filter = True
 
+    # 1. merge
     merge_file = utils.path(params.twd, "merge.txt")
     with open(merge_file, 'w') as handle:
         for bed_file in bed_files[1:]:
@@ -247,28 +248,44 @@ def merge_beds(bed_files, params, merge_file="merge.txt"):
     flags['bfile'] = bed_files[0]
     flags['merge-mode'] = 1
 
-    if final_filter:
+    if final_filter or params.set_missing_to_reference:
         flags['out'] = utils.path(params.twd, "tmp_out")
     else:
         flags['out'] = params.out
 
-    if params.check_reference:
-        flags['a2-allele'] = params.ref_allele
-
     utils.run_plink(params.plink, flags)
+
+    # 2. set missing to reference
+    if params.set_missing_to_reference:
+        flags = dict()
+        flags['bfile'] = flags['out']
+
+        if params.check_reference:
+            flags['a2-allele'] = params.ref_allele
+
+        if params.set_missing_to_reference:
+            flags['fill-missing-a2'] = ''
+
+        flags['out'] = utils.path(params.twd, "tmp_impute")
+        flags['make-bed'] == ''
+
+        utils.run_plink(params.plink, flags)
+
+
+    # 3. set reference allele
 
     if final_filter:
         logging.info(" applying final filter ")
         filter_flags = dict()
         filter_flags['bfile'] = flags['out']
         
-        if params.output_type is 'bed':
+        if params.output_type == 'bed':
             filter_flags['make-bed'] = ''
         
-        if params.output_type is 'vcf':
+        if params.output_type == 'vcf':
             filter_flags['recode'] = 'vcf-iid'
             
-        if params.output_type is 'ped':
+        if params.output_type == 'ped':
             filter_flags['recode'] = ''
 
         filter_flags['out'] = params.out

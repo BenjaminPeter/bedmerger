@@ -233,6 +233,8 @@ class Parameters(object):
     def sanity_checks(params):
         """perform some checks that the input arguments make sense"""
 
+        print params.bed
+
         for bedfile in params.bed:
             utils.assert_bed_file_exists(bedfile)
         for vcffile in params.vcf:

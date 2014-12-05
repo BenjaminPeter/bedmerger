@@ -13,13 +13,13 @@ logging is very messy and not consistent
 
 - from the human origins data set, get all snp on chromosome X that have an ancestral allele typed 
 
-        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata
-                            --check-reference 
-                            --reference_path ancestral_hg19 
-                            --keep_snp_id false --out
-                            --out out/vdata_polarized 
-                            --chromosome X  
-                            --twd tmp 
+        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata \
+                            --check-reference                                                      \
+                            --reference_path ancestral_hg19                                        \
+                            --keep_snp_id false                                                    \
+                            --out out/vdata_polarized                                              \
+                            --chromosome X                                                         \
+                            --twd tmp                                                              \
                             --plink ~/bin/plink
 
 
@@ -27,31 +27,33 @@ logging is very messy and not consistent
      and keep only snp present in all three data sets, write a vcf file in the
 end
 
-        python bedmerger.py --vcf /data/external_public/1000genomes/release/Phase3/ALL.chr21.phase3_shapeit2_mvncall_integrated.20130502.genotype.vcf.gz
-                            --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata 
-                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper 
-                            --check-reference
-                            --reference_path hg19 
-                            --keep_snp_id false  
-                            --chromosome 21 
-                            --twd tmp 
-                            --plink ~/bin/plink 
-                            --merge_type inner 
+        python bedmerger.py --vcf /data/external_public/1000genomes/release/Phase3/ALL.chr21.phase3_shapeit2_mvncall_integrated.20130502.genotype.vcf.gz \
+                            --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata                                                       \
+                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper                                                               \
+                            --check-reference                                                                                                            \
+                            --reference_path hg19                                                                                                        \
+                            --keep_snp_id false                                                                                                          \
+                            --chromosome 21                                                                                                              \
+                            --twd tmp                                                                                                                    \
+                            --plink ~/bin/plink                                                                                                          \
+                            --merge_type inner                                                                                                           \
                             --output_type vcf
 
 
 - merge the data sets from bhakar2013 and the human origins data set, keep all
   snp and set missing data to the reference allele
 
-        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata 
-                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper 
-                            --check-reference
-                            --reference_path hg19 
-                            --keep_snp_id false  
-                            --twd tmp 
-                            --merge_type outer
-                            --plink ~/bin/plink 
-                            --out out/ex_outer
+        python bedmerger.py --bed /data/external_public/human_origins_affy/EuropeFullyPublic/vdata \
+                            --bed /data/external_public/behar_et_al_2013/new_data_in_paper         \
+                            --check-reference                                                      \
+                            --reference_path hg19                                                  \
+                            --keep_snp_id false                                                    \
+                            --twd tmp                                                              \
+                            --merge_type outer                                                     \
+                            --plink ~/bin/plink                                                    \ 
+                            --out out/ex_outer                                                     \
+                            --set_missing_to_reference                                             \
+                            --output_type vcf
 #### Parameters
 
 The help message output is pasted below for convenience:

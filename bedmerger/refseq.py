@@ -128,6 +128,7 @@ def filter_data_set(data, chromosomes=None):
     if chromosomes is None:
         return data
     else:
+        fix_chromosome_ids(data)
         mask = np.zeros(len(data), dtype="bool")
         for c in chromosomes:
             mask[np.array(data.chrom == c)] = True

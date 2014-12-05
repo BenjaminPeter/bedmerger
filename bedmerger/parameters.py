@@ -74,11 +74,13 @@ class Parameters(object):
         # --------------------------------------------------
         args.add_argument("--bed", '--bedfiles', nargs="*",
                           default=[],
+                          action='append',
                           type=utils.standardize_bed_file_name,
                           help="""The bedfiles to merge. The bim and fam files
                               are assumed to have the same name""")
 
         args.add_argument("--vcf", '--vcffiles', nargs="*",
+                          action='append',
                           default=[],
                           help="The files in vcf format to merge")
 
@@ -205,6 +207,9 @@ class Parameters(object):
     
         args = Parameters.args
         params = args.parse_args()
+
+        params.bed = [item for sublist in params.bed for item in sublist]
+        params.vcf = [item for sublist in params.vcf for item in sublist]
 
         if params.out is None:
             vcf_names = [os.path.splitext(v)[0] for v in params.vcf]

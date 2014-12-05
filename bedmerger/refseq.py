@@ -328,7 +328,7 @@ def fix_chromosome_ids(data):
     def fix(data, old, new):
         to_fix = data['chrom'] == old
         print ("fixing, %d to fix with %s/%s" % (np.sum(to_fix), old, new))
-        data.loc[to_fix, 'chrom'] == new
+        data.loc[to_fix, 'chrom'] = new
 
     fix(data, 'MT', 'mt')
     fix(data, 'M', 'mt')
@@ -393,6 +393,7 @@ def rename_snpids_from_data(tmp_bed_files, twd=""):
         bim = BimFile(fname)
         data = bim.load_variants()
         fix_chromosome_ids(data)
+
         data['snpid'] = create_data_id(data)
         BimFile.write_file(out_path, data)
         new_tmp_files.append(out_path)
